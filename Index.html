@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F*CKFACTS - Redes Sociales</title>
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* iPhone 16 Pro Max */
+        .iphone-16-pro-max {
+            width: 428px;
+            height: 926px;
+            background: #1a1a1a;
+            border-radius: 60px;
+            position: relative;
+            box-shadow: 
+                0 0 0 14px #1a1a1a,
+                0 0 0 16px #2c2c2e,
+                0 30px 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            transform: scale(0.85);
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 40px;
+            background: #1a1a1a;
+            border-radius: 24px;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .island-camera {
+            width: 12px;
+            height: 12px;
+            background: #0a0a0a;
+            border-radius: 50%;
+            border: 2px solid #2c2c2e;
+            margin-right: 8px;
+        }
+
+        .island-sensor {
+            width: 24px;
+            height: 12px;
+            background: #0a0a0a;
+            border-radius: 6px;
+            border: 2px solid #2c2c2e;
+        }
+
+        /* Pantalla */
+        .screen {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            border-radius: 50px;
+        }
+
+        /* Contenedor de redes sociales */
+        .social-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Cada pantalla de red social */
+        .social-screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Barra de estado */
+        .status-bar {
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+        }
+
+        /* Feeds personalizados */
+        .feed {
+            padding: 16px;
+            color: white;
+        }
+
+        .post {
+            background: #1c1c1e;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transform: scale(0.98);
+            transition: transform 0.3s;
+        }
+
+        .post:active {
+            transform: scale(0.96);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            background: linear-gradient(45deg, #ff0033, #0099ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .timestamp {
+            color: #8e8e93;
+            font-size: 12px;
+        }
+
+        .post-content {
+            padding: 0 16px 16px;
+        }
+
+        .post-text {
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background: #2c2c2e;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8e8e93;
+            font-size: 14px;
+        }
+
+        .post-actions {
+            display: flex;
+            padding: 0 16px 12px;
+            gap: 16px;
+        }
+
+        .action {
+            display: flex;
+            align-items: center;
+            color: #8e8e93;
+            font-size: 14px;
+        }
+
+        .action i {
+            margin-right: 6px;
+            font-size: 20px;
+        }
+
+        /* Barra de navegación */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+        }
+
+        .nav-icon {
+            color: #8e8e93;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .nav-icon.active {
+            color: white;
+        }
+
+        /* Indicador de página */
+        .page-indicator {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        /* Efecto de scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="iphone-16-pro-max">
+        <div class="dynamic-island">
+            <div class="island-camera"></div>
+            <div class="island-sensor"></div>
+        </div>
+        
+        <div class="screen">
+            <div class="social-container" id="socialContainer">
+                <!-- Instagram -->
+                <div class="social-screen" data-social="instagram" style="top: 0;">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>5G <i class="fas fa-wifi"></i></span>
+                    </div>
+                    
+                    <div class="feed">
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="profile-pic">FF</div>
+                                <div class="post-info">
+                                    <div class="username">fckfacts.corp</div>
+                                    <div class="timestamp">Hace 2h</div>
+                                </div>
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                            <div class="post-content">
+                                <p class="post-text">¿Sabías que los pulpos tienen 3 corazones y sangre azul? 🐙💙 #DatoWTF #Ciencia</p>
+                                <div class="post-image">
+                                    <i class="fas fa-image" style="font-size: 40px;"></i>
+                                </div>
+                                <div class="post-actions">
+                                    <div class="action"><i class="far fa-heart"></i> 3.4K</div>
+                                    <div class="action"><i class="far fa-comment"></i> 128</div>
+                                    <div class="action"><i class="far fa-share-square"></i></div>
+                                    <div class="action" style="flex: 1; text-align: right;"><i class="far fa-bookmark"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div class="post-header">
+                                <div class="profile-pic">FF</div>
+                                <div class="post-info">
+                                    <div class="username">fckfacts.corp</div>
+                                    <div class="timestamp">Ayer</div>
+                                </div>
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                            <div class="post-content">
+                                <p class="post-text">🚀 Nuevo episodio del podcast: "Mitos sexuales de los animales" 🎧 Link en bio! #Podcast #WTF</p>
+                                <div class="post-image" style="aspect-ratio: 16/9;">
+                                    <i class="fas fa-podcast" style="font-size: 40px;"></i>
+                                </div>
+                                <div class="post-actions">
+                                    <div class="action"><i class="far fa-heart"></i> 5.2K</div>
+                                    <div class="action"><i class="far fa-comment"></i> 342</div>
+                                    <div class="action"><i class="far fa-share-square"></i></div>
+                                    <div class="action" style="flex: 1; text-align: right;"><i class="far fa-bookmark"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-bar">
+                        <i class="fas fa-home nav-icon active"></i>
+                        <i class="fas fa-search nav-icon"></i>
+                        <i class="fas fa-plus-square nav-icon"></i>
+                        <i class="fas fa-film nav-icon"></i>
+                        <div class="profile-pic" style="width: 24px; height: 24px; background: #0099ff;">FF</div>
+                    </div>
+                </div>
+                
+                <!-- TikTok -->
+                <div class="social-screen" data-social="tiktok" style="top: 100%;">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>5G <i class="fas fa-wifi"></i></span>
+                    </div>
+                    
+                    <div class="feed" style="padding: 0;">
+                        <div style="position: relative; height: 100%;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                <i class="fas fa-music" style="font-size: 50px; margin-bottom: 20px; color: #ff0050;"></i>
+                                <h3 style="margin-bottom: 10px;">F*CKFACTS en TikTok</h3>
+                                <p style="color: #8e8e93; margin-bottom: 20px;">@fckfacts.corp</p>
+                                <div style="width: 200px; height: 350px; background: #2c2c2e; border-radius: 10px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-play-circle" style="font-size: 40px;"></i>
+                                </div>
+                                <p style="margin-top: 20px; color: #8e8e93;">"Los pingüinos tienen rodillas" 👆 Mira el video completo</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-bar">
+                        <i class="fas fa-home nav-icon"></i>
+                        <i class="fas fa-search nav-icon"></i>
+                        <i class="fas fa-plus-circle nav-icon" style="color: #ff0050;"></i>
+                        <i class="fas fa-inbox nav-icon"></i>
+                        <i class="fas fa-user nav-icon"></i>
+                    </div>
+                </div>
+                
+                <!-- YouTube -->
+                <div class="social-screen" data-social="youtube" style="top: 200%;">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>5G <i class="fas fa-wifi"></i></span>
+                    </div>
+                    
+                    <div class="feed">
+                        <div style="padding: 16px; display: flex; align-items: center; border-bottom: 1px solid #2c2c2e;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #ff0000; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                <i class="fab fa-youtube" style="color: white; font-size: 20px;"></i>
+                            </div>
+                            <div>
+                                <h3>F*CKFACTS</h3>
+                                <p style="color: #8e8e93; font-size: 14px;">1.2M suscriptores</p>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div style="width: 100%; height: 200px; background: #2c2c2e; border-radius: 10px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-play-circle" style="font-size: 50px; color: #ff0000;"></i>
+                            </div>
+                            <div class="post-content">
+                                <h3 style="margin-bottom: 8px;">10 Datos que te Harán Cuestionar la Realidad</h3>
+                                <p style="color: #8e8e93; margin-bottom: 12px; font-size: 14px;">1.2M vistas · Hace 3 semanas</p>
+                                <p style="margin-bottom: 12px; line-height: 1.4;">En este episodio destruimos mitos científicos con hechos verificados que parecen fake. ¿Cuántos de estos conocías?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-bar">
+                        <i class="fas fa-home nav-icon active"></i>
+                        <i class="fas fa-compass nav-icon"></i>
+                        <i class="fas fa-plus-square nav-icon" style="color: #ff0000;"></i>
+                        <i class="fas fa-subscript nav-icon"></i>
+                        <i class="fas fa-video nav-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-indicator">
+            <div class="dot active" data-page="0"></div>
+            <div class="dot" data-page="1"></div>
+            <div class="dot" data-page="2"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socialContainer = document.getElementById('socialContainer');
+            const socialScreens = document.querySelectorAll('.social-screen');
+            const dots = document.querySelectorAll('.dot');
+            let currentIndex = 0;
+            let isScrolling = false;
+            let startY, currentY;
+            
+            // Configuración inicial
+            arrangeScreens();
+            
+            // Touch events para móvil
+            socialContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+            socialContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+            socialContainer.addEventListener('touchend', handleTouchEnd);
+            
+            // Wheel event para desktop
+            socialContainer.addEventListener('wheel', handleWheel, { passive: false });
+            
+            // Click en los dots
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const targetIndex = parseInt(this.getAttribute('data-page'));
+                    if (targetIndex !== currentIndex) {
+                        currentIndex = targetIndex;
+                        updateScreenPosition();
+                    }
+                });
+            });
+            
+            // Redes sociales reales (simuladas)
+            document.querySelectorAll('[data-social]').forEach(screen => {
+                const social = screen.getAttribute('data-social');
+                const icon = screen.querySelector('.nav-icon.active') || screen.querySelector('.nav-icon');
+                
+                icon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Animación de feedback
+                    this.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                    
+                    // Redirigir a la red social real
+                    setTimeout(() => {
+                        let url;
+                        switch(social) {
+                            case 'instagram': url = 'https://instagram.com/fckfacts.corp'; break;
+                            case 'tiktok': url = 'https://tiktok.com/@fckfacts.corp'; break;
+                            case 'youtube': url = 'https://youtube.com/@CanalFckFacts'; break;
+                        }
+                        window.open(url, '_blank');
+                    }, 300);
+                });
+            });
+            
+            function arrangeScreens() {
+                socialScreens.forEach((screen, index) => {
+                    screen.style.transform = `translateY(${index * 100}%)`;
+                });
+            }
+            
+            function updateScreenPosition() {
+                if (isScrolling) return;
+                isScrolling = true;
+                
+                socialContainer.style.transform = `translateY(-${currentIndex * 100}%)`;
+                
+                // Actualizar indicadores
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+                
+                // Efecto de rebote
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 800);
+            }
+            
+            function handleTouchStart(e) {
+                startY = e.touches[0].clientY;
+                currentY = startY;
+            }
+            
+            function handleTouchMove(e) {
+                if (isScrolling) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                currentY = e.touches[0].clientY;
+                const diff = startY - currentY;
+                
+                // Desplazamiento vertical
+                if (Math.abs(diff) > 10) {
+                    e.preventDefault();
+                    
+                    // Limitar el desplazamiento
+                    const maxOffset = currentIndex === 0 ? 0 : 
+                                     currentIndex === socialScreens.length - 1 ? diff/3 : diff;
+                    
+                    socialContainer.style.transform = `translateY(calc(-${currentIndex * 100}% - ${maxOffset}px))`;
+                }
+            }
+            
+            function handleTouchEnd() {
+                const threshold = 50;
+                const diff = startY - currentY;
+                
+                if (diff > threshold && currentIndex < socialScreens.length - 1) {
+                    // Scroll hacia abajo
+                    currentIndex++;
+                } else if (diff < -threshold && currentIndex > 0) {
+                    // Scroll hacia arriba
+                    currentIndex--;
+                }
+                
+                updateScreenPosition();
+            }
+            
+            function handleWheel(e) {
+                if (isScrolling) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (e.deltaY > 50 && currentIndex < socialScreens.length - 1) {
+                    // Scroll hacia abajo
+                    e.preventDefault();
+                    currentIndex++;
+                    updateScreenPosition();
+                } else if (e.deltaY < -50 && currentIndex > 0) {
+                    // Scroll hacia arriba
+                    e.preventDefault();
+                    currentIndex--;
+                    updateScreenPosition();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
